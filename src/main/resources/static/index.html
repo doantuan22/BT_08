@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản lý Product &amp; Category</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="app-header">
+    <div class="header-top">
+        <h1>Quản lý sản phẩm</h1>
+        <a class="btn-graphiql" href="/graphiql?path=/graphql" target="_blank" rel="noopener"
+           title="Mở GraphiQL để thử query/mutation">GraphiQL &#8599;</a>
+    </div>
+    <nav class="tabs">
+        <button class="tab active" data-tab="products">Sản phẩm</button>
+        <button class="tab" data-tab="categories">Danh mục</button>
+    </nav>
+</header>
+
+<main>
+    <section id="tab-products" class="tab-panel">
+        <div class="toolbar">
+            <label>Lọc theo danh mục:
+                <select id="categoryFilter"></select>
+            </label>
+            <span class="hint">Sắp xếp theo giá tăng dần</span>
+            <button id="btnAddProduct" class="btn primary">+ Thêm sản phẩm</button>
+        </div>
+
+        <table id="productTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tiêu đề</th>
+                <th class="num">Giá (₫)</th>
+                <th class="num">Số lượng</th>
+                <th>Danh mục</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <p id="productEmpty" class="empty" hidden>Không có sản phẩm nào.</p>
+    </section>
+
+    <section id="tab-categories" class="tab-panel" hidden>
+        <div class="toolbar">
+            <span class="hint">Không xoá được danh mục còn sản phẩm</span>
+            <button id="btnAddCategory" class="btn primary">+ Thêm danh mục</button>
+        </div>
+
+        <table id="categoryTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên danh mục</th>
+                <th>Ảnh</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <p id="categoryEmpty" class="empty" hidden>Chưa có danh mục nào.</p>
+    </section>
+</main>
+
+<div id="productModal" class="modal" hidden>
+    <form id="productForm" class="modal-box" novalidate>
+        <h2 id="productModalTitle">Thêm sản phẩm</h2>
+        <input type="hidden" id="productId">
+
+        <label>Tiêu đề *
+            <input type="text" id="productName" maxlength="200">
+            <small class="field-error" data-error-for="title"></small>
+        </label>
+        <label>Giá (₫) *
+            <input type="number" id="productPrice" min="0" step="1000">
+            <small class="field-error" data-error-for="price"></small>
+        </label>
+        <label>Số lượng *
+            <input type="number" id="productQuantity" min="0" step="1" value="0">
+            <small class="field-error" data-error-for="quantity"></small>
+        </label>
+        <label>Danh mục *
+            <select id="productCategory"></select>
+            <small class="field-error" data-error-for="categoryId"></small>
+        </label>
+        <label>Mô tả
+            <textarea id="productDesc" rows="3" maxlength="1000"></textarea>
+            <small class="field-error" data-error-for="desc"></small>
+        </label>
+
+        <div class="modal-actions">
+            <button type="button" class="btn" data-close>Huỷ</button>
+            <button type="submit" class="btn primary">Lưu</button>
+        </div>
+    </form>
+</div>
+
+<div id="categoryModal" class="modal" hidden>
+    <form id="categoryForm" class="modal-box" novalidate>
+        <h2 id="categoryModalTitle">Thêm danh mục</h2>
+        <input type="hidden" id="categoryId">
+
+        <label>Tên danh mục *
+            <input type="text" id="categoryName" maxlength="100">
+            <small class="field-error" data-error-for="name"></small>
+        </label>
+        <label>Ảnh (đường dẫn / URL)
+            <input type="text" id="categoryImages" maxlength="500" placeholder="images/categories/ten-anh.jpg">
+            <small class="field-error" data-error-for="images"></small>
+        </label>
+
+        <div class="modal-actions">
+            <button type="button" class="btn" data-close>Huỷ</button>
+            <button type="submit" class="btn primary">Lưu</button>
+        </div>
+    </form>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>

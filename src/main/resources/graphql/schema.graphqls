@@ -1,0 +1,56 @@
+"""Sản phẩm."""
+type Product {
+    id: ID!
+    title: String!
+    price: Float!
+    quantity: Int!
+    desc: String
+    "Category của sản phẩm (nạp theo batch, không N+1)."
+    category: Category!
+}
+
+"""Danh mục sản phẩm."""
+type Category {
+    id: ID!
+    name: String!
+    "Đường dẫn / URL ảnh của category."
+    images: String
+}
+
+input ProductInput {
+    title: String!
+    price: Float!
+    quantity: Int!
+    desc: String
+    categoryId: ID!
+}
+
+input CategoryInput {
+    name: String!
+    images: String
+}
+
+type Query {
+    "Tất cả product, sắp xếp theo price tăng dần."
+    products: [Product!]!
+    "Product thuộc 1 category (theo id), giá tăng dần."
+    productsByCategory(categoryId: ID!): [Product!]!
+    "Product thuộc 1 category (theo tên, không phân biệt hoa/thường), giá tăng dần."
+    productsByCategoryName(categoryName: String!): [Product!]!
+    "Trả null nếu không tồn tại."
+    product(id: ID!): Product
+    categories: [Category!]!
+    "Trả null nếu không tồn tại."
+    category(id: ID!): Category
+}
+
+type Mutation {
+    createProduct(input: ProductInput!): Product!
+    updateProduct(id: ID!, input: ProductInput!): Product!
+    "true nếu xoá thành công; lỗi NOT_FOUND nếu id không tồn tại."
+    deleteProduct(id: ID!): Boolean!
+    createCategory(input: CategoryInput!): Category!
+    updateCategory(id: ID!, input: CategoryInput!): Category!
+    "Lỗi nếu id không tồn tại hoặc category còn product."
+    deleteCategory(id: ID!): Boolean!
+}
